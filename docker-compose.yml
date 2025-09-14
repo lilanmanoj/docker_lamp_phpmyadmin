@@ -7,15 +7,23 @@ services:
       - "8080:80"
     volumes:
       - ./src:/var/www/html
+    networks:
+      - my-network
     depends_on:
       - db
 
   phpmyadmin:
     image: phpmyadmin:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
     ports:
-      - "8080:80"
+      - "8000:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpassword
+      UPLOAD_LIMIT: 256M
+      MAX_EXECUTION_TIME: 300
+    networks:
+      - my-network
     depends_on:
       - db
 
@@ -30,6 +38,11 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - my-network
 
 volumes:
   db_data:
+
+networks:
+  my-network:
