@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Index</title>
+        <title>It works</title>
     </head>
     <body>
         <?php
