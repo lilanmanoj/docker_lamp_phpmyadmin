@@ -6,8 +6,6 @@ try {
 
     if ($con->connect_error) {
         die("Connection failed: " . $con->connect_error);
-    } else {
-        echo "DB Connected!";
     }
 } catch (\Throwable $th) {
     echo "Error: (" . $th->getCode() . ") " . $th->getMessage();
