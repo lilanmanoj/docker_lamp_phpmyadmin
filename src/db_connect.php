@@ -1,11 +1,16 @@
 <?php
 require_once('config.php');
 
-$con = new mysqli($db_host.":".$db_port, $db_username, $db_password, $db_name);
+try {
+    $con = new mysqli($db_host.":".$db_port, $db_username, $db_password, $db_name);
 
-if ($con->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} else {
-    echo "DB Connected!";
+    if ($con->connect_error) {
+        die("Connection failed: " . $con->connect_error);
+    } else {
+        echo "DB Connected!";
+    }
+} catch (\Throwable $th) {
+    echo "Error: (" . $th->getCode() . ") " . $th->getMessage();
+    die();
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
-$db_host="";
-$db_port="";
-$db_username="";
-$db_password="";
-$db_name="";
+$db_host="db";
+$db_port="3306";
+$db_username="user";
+$db_password="userpassword";
+$db_name="mydb";
 ?>
