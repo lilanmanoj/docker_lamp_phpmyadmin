@@ -1,5 +1,5 @@
 <?php
-require_once('config.php');
+require_once(__DIR__ . '/config.php');
 
 try {
     $con = new mysqli($db_host.":".$db_port, $db_username, $db_password, $db_name);
