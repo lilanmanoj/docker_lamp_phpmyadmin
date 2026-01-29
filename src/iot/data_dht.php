@@ -27,7 +27,13 @@ if (!empty($data)) {
     $res = $stmt->execute();
 } else {
     $query = "SELECT * FROM `dht11_data` order by created_at desc";
+
+    $graph_data = [
+        ['Timestamp', 'Temperature', 'Humidity']
+    ];
 ?>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+
     <table border="1" cellpadding="4" style="border-collapse:collapse;">
             <tr>
                 <th>Timestamp</th>
@@ -59,11 +65,28 @@ if (!empty($data)) {
 <?php
 }
 ?>
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     function autoRefresh() {
         window.location = window.location.href;
     }
 
     setInterval('autoRefresh()', 6000);
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable(<?php print_r($graph_data, true); ?>);
+
+        var options = {
+            title: 'Live Temperature & Humidity',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+    }
 </script>
