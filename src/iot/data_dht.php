@@ -26,7 +26,7 @@ if (!empty($data)) {
     $stmt->bind_param("ssss", $timestamp, $data['device'], $data['temperature'], $data['humidity']);
     $res = $stmt->execute();
 } else {
-    $query = "SELECT * FROM `dht11_data` order by created_at desc";
+    $query = "SELECT * FROM `dht11_data` WHERE `device_id` = '24sea052' order by created_at asc";
 
     $graph_data = [
         ['Timestamp', 'Temperature', 'Humidity']
@@ -34,14 +34,15 @@ if (!empty($data)) {
 ?>
     <div id="curve_chart" style="width: 900px; height: 500px"></div>
 
-    <table border="1" cellpadding="4" style="border-collapse:collapse;">
-            <tr>
-                <th>Timestamp</th>
-                <th>Device ID</th>
-                <th>Temperature</th>
-                <th>Humidity</th>
-                <th>Created At</th>
-            </tr>
+    <div id="data_table_container" style="padding:15px 50px;">
+        <table border="1" cellpadding="4" style="border-collapse:collapse;">
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Device ID</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                    <th>Created At</th>
+                </tr>
 <?php
     $sql = $con->prepare($query);
     $sql->execute();
@@ -49,6 +50,8 @@ if (!empty($data)) {
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            $graph_data[] = [$row['timestamp'], $row['temperature'], $row['humidity']];
+
             echo "<tr>";
             echo "<td>" . $row['timestamp'] . "</td>";
             echo "<td>" . $row['device_id'] . "</td>";
@@ -61,7 +64,8 @@ if (!empty($data)) {
         echo "<tr><td colspan='5'>No records found.</td></tr>";
     }
 ?>
-    </table>
+        </table>
+    </div>
 <?php
 }
 ?>
@@ -77,7 +81,7 @@ if (!empty($data)) {
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        var data = google.visualization.arrayToDataTable(<?php print_r($graph_data, true); ?>);
+        var data = google.visualization.arrayToDataTable(<?php echo(json_encode($graph_data)); ?>);
 
         var options = {
             title: 'Live Temperature & Humidity',
